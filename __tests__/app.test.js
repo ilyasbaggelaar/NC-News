@@ -49,3 +49,29 @@ describe("GET /api/topics", () => {
       })
   });
 });
+
+describe("GET /api/articles/:article_id", () => {
+  test("200: Responds with a status code", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+  });
+
+  test("404: Responds with Article Not Found when the article ID does not exist", () => {
+    return request(app)
+      .get("/api/articles/9999")
+      .expect(404)
+      .then(({body}) => {
+        expect(body.msg).toBe('Article not found')
+      })
+  });
+
+  test("400: Responds with Invalid Article ID when the article ID is not a number", () => {
+    return request(app)
+      .get("/api/articles/abcdefg")
+      .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe('Invalid article ID')
+      });
+  });
+});
