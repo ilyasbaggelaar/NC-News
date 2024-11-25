@@ -28,4 +28,4 @@ Be sure to look in db/setup.sql to find the corresponding database name. Remove 
 
 # Aditional notes
 
-And there you go! You're all set up! Be sure to run your setup.sql (run setup.sql) and everything's set up!
+And there you go! You're all set up! Be sure to run your setup.sql (npm run setup-dbs) and everything's set up!
