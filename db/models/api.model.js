@@ -10,7 +10,6 @@ function readArticleId(articleId) {
    // console.log(articleId)
  return db.query('SELECT * FROM articles WHERE article_id = $1;', [articleId])
  .then(({rows}) => {
-   console.log({rows})
     return rows[0];
  })
 }

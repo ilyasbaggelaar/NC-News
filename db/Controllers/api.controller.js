@@ -7,7 +7,6 @@ exports.getApiDocu = (req, res) => {
 
 exports.getTopics = (req, res) => {
         readTopics().then((topics) => {
-            //console.log(topics)
             res.status(200).send({topics})
         })
         .catch((err) => {

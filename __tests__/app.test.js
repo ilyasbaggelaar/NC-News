@@ -74,4 +74,23 @@ describe("GET /api/articles/:article_id", () => {
         expect(body.msg).toBe('Invalid article ID')
       });
   });
+
+  test("200: Responds with an article object, which should have all the properties.", () => {
+    return request(app)
+      .get("/api/articles/2")
+      .expect(200)
+      .then((response) => {
+        const {body} = response
+        const {article} = body
+          expect(article).toMatchObject({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String)
+          });
+      })
+  });
 });
