@@ -49,3 +49,48 @@ describe("GET /api/topics", () => {
       })
   });
 });
+
+describe("GET /api/articles/:article_id", () => {
+  test("200: Responds with a status code", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+  });
+
+  test("404: Responds with Article Not Found when the article ID does not exist", () => {
+    return request(app)
+      .get("/api/articles/9999")
+      .expect(404)
+      .then(({body}) => {
+        expect(body.msg).toBe('Article not found')
+      })
+  });
+
+  test("400: Responds with Invalid Article ID when the article ID is not a number", () => {
+    return request(app)
+      .get("/api/articles/abcdefg")
+      .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe('Invalid article ID')
+      });
+  });
+
+  test("200: Responds with an article object, which should have all the properties.", () => {
+    return request(app)
+      .get("/api/articles/2")
+      .expect(200)
+      .then((response) => {
+        const {body} = response
+        const {article} = body
+          expect(article).toMatchObject({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String)
+          });
+      })
+  });
+});
