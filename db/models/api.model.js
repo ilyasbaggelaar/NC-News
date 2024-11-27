@@ -77,7 +77,9 @@ function updateArticleVotes(article_id, votes) {
     `, [votes, article_id])
 
     .then(({rows}) => {
-      console.log(rows)
+      if(rows.length === 0){
+        return Promise.reject({status: 404, msg: "Article not found" })
+      }
       return rows[0]
     })
 }
