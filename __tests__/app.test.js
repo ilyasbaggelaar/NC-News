@@ -191,3 +191,58 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   })
 })
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test('POST: 201 inserts a new comment to the db and sends the new comment back to the client.', () => {
+    const newComment = {
+      username: "icellusedkars",
+      body: "Ik hou van Gouda kaas!"
+    }
+
+    return request(app)
+    .post('/api/articles/1/comments')
+    .send(newComment)
+    .expect(201)
+    .then((response) => {
+      const {body} = response;
+      expect(body.comment.author).toBe("icellusedkars")
+      expect(body.comment.body).toBe("Ik hou van Gouda kaas!")
+    })
+  })
+
+  test('Should return an error if the username doesnt exist', () => {
+    const newComment = {
+      username: "Kerstman159",
+      body: "Hallo!"
+    }
+
+    return request(app)
+    .post('/api/articles/1/comments')
+    .send(newComment)
+    .expect(400)
+    .then((response) => {
+      const { body } = response;
+      const {msg} = body;
+      expect(msg).toBe(("Bad request"))
+    })
+  })
+
+  test('POST: 400 responds with a status and error message when provided with a bad comment, for example no username!', () => {
+
+    const newComment = {
+      body: "Thats cool!"
+    }
+
+
+    return request(app)
+    .post('/api/articles/1/comments')
+    .send(newComment)
+    .expect(400)
+    .then((response) => {
+      const {body} = response
+      const {msg} = body;
+
+      expect(msg).toBe(("Bad request"))
+    })
+  })
+})

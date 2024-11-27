@@ -4,6 +4,7 @@ const {
   readArticleId,
   readArticles,
   readArticleComments,
+  insertComment,
 } = require("../models/api.model");
 
 exports.getApiDocu = (req, res) => {
@@ -61,3 +62,19 @@ exports.getArticleComments = (req, res, next) => {
       next(err);
     });
 };
+
+exports.postArticleComment = (req, res, next) => {
+
+
+  const { article_id } = req.params
+  const { username, body } = req.body
+
+  
+
+  insertComment(username, body, article_id).then((comment) => {
+    res.status(201).send({comment})
+  })
+  .catch((err) => {
+    next(err)
+  })
+}
