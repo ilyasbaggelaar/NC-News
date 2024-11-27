@@ -137,3 +137,45 @@ describe("GET /api/articles", () => {
       });
   });
 });
+
+describe("GET /api/articles/:article_id/comments", () => {
+  test("sends an array of comments belonging to a single article to the client", () => {
+    return request(app)
+    .get("/api/articles/1/comments")
+    .expect(200)
+    .then((response) => {
+      const {body} = response;
+      const {comments} = body;
+      expect(comments.length).toBe(11)
+      comments.forEach((comment) => {
+        expect(typeof comment.comment_id).toBe('number');
+        expect(typeof comment.votes).toBe('number');
+        expect(typeof comment.created_at).toBe('string')
+        expect(typeof comment.author).toBe('string')
+        expect(typeof comment.body).toBe('string')
+        expect(typeof comment.article_id).toBe('number')
+      })
+    })
+  })
+
+  test("GET: 404 sends an appropiate status and error message when given a valid but non-existent id", () => {
+    return request(app)
+    .get("/api/articles/999/comments")
+    .expect(404)
+    .then((response) => {
+      const {body} = response;
+      const {msg} = body;
+      expect(msg).toBe("Article not found")
+    })
+  })
+  test("GET: 400 sends an appropiate error message when given an invalid_id", () => {
+    return request(app)
+    .get('/api/articles/abc/comments')
+    .expect(400)
+    .then((response) => {
+      const { body } = response;
+      const {msg} = body;
+      expect(msg).toBe(("Bad request"))
+    })
+  })
+})
