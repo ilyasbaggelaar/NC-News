@@ -178,4 +178,16 @@ describe("GET /api/articles/:article_id/comments", () => {
       expect(msg).toBe(("Bad request"))
     })
   })
+
+  test("If the returned array of comments is sorted by created_at, with most recent comments at the top.", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments).toBeSortedBy("created_at", {
+          descending: true,
+        });
+      });
+  })
 })
