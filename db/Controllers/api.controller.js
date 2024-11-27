@@ -3,6 +3,7 @@ const {
   readTopics,
   readArticleId,
   readArticles,
+  readArticleComments,
 } = require("../models/api.model");
 
 exports.getApiDocu = (req, res) => {
@@ -43,8 +44,20 @@ exports.getArticleId = (req, res) => {
 exports.getArticles = (req, res) => {
   readArticles().then((articles) => {
     if (articles.length === 0) {
-      return res.status(400).send({ msg: "Articles not found" });
+      return res.status(404).send({ msg: "Article not found" });
     }
     res.status(200).send({ articles });
   });
+};
+
+exports.getArticleComments = (req, res, next) => {
+  const { article_id } = req.params;
+
+  readArticleComments(article_id)
+    .then((comments) => {
+      res.status(200).send({ comments });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
