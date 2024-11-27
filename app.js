@@ -6,6 +6,7 @@ const {
   getArticles,
   getArticleComments,
   postArticleComment,
+  patchArticleVotes
 } = require("./db/Controllers/api.controller");
 
 const app = express();
@@ -22,6 +23,8 @@ app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id/comments", getArticleComments)
 
 app.post("/api/articles/:article_id/comments", postArticleComment)
+
+app.patch("/api/articles/:article_id", patchArticleVotes)
 
 
 

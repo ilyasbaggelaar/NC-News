@@ -68,6 +68,20 @@ function insertComment(username, body, article_id) {
   })
 }
 
+function updateArticleVotes(article_id, votes) {
+  return db.query(`
+    UPDATE articles
+    SET votes = votes + $1
+    WHERE article_id = $2
+    RETURNING *;
+    `, [votes, article_id])
+
+    .then(({rows}) => {
+      console.log(rows)
+      return rows[0]
+    })
+}
 
 
-module.exports = { readTopics, readArticleId, readArticles, readArticleComments, insertComment};
+
+module.exports = { readTopics, readArticleId, readArticles, readArticleComments, insertComment, updateArticleVotes};
