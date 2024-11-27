@@ -1,3 +1,4 @@
+const { user } = require("pg/lib/defaults");
 const db = require("../connection");
 
 function readTopics() {
@@ -54,6 +55,19 @@ function readArticleComments(article_id) {
 
 }
 
+function insertComment(username, body, article_id) {
+
+  return db.query('INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *;',
+    [username, body, article_id]
+  )
+  .then((result) => {
+    if(result.rows.length === 0){
+      return Promise.reject()
+    }
+    return result.rows[0]
+  })
+}
 
 
-module.exports = { readTopics, readArticleId, readArticles, readArticleComments};
+
+module.exports = { readTopics, readArticleId, readArticles, readArticleComments, insertComment};
