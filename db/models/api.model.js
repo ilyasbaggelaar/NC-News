@@ -45,45 +45,58 @@ ON articles.article_id = comments.article_id
 }
 
 function readArticleComments(article_id) {
- return db.query('SELECT * FROM comments WHERE comments.article_id = $1 ORDER BY comments.created_at DESC;', [article_id])
- .then(({rows}) => {
-  if (rows.length === 0) {
-    return Promise.reject({status: 404, msg: "Article not found" });
-  }
-  return rows
- })
-
+  return db
+    .query(
+      "SELECT * FROM comments WHERE comments.article_id = $1 ORDER BY comments.created_at DESC;",
+      [article_id]
+    )
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({ status: 404, msg: "Article not found" });
+      }
+      return rows;
+    });
 }
 
 function insertComment(username, body, article_id) {
-
-  return db.query('INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *;',
-    [username, body, article_id]
-  )
-  .then((result) => {
-    if(result.rows.length === 0){
-      return Promise.reject()
-    }
-    return result.rows[0]
-  })
+  return db
+    .query(
+      "INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *;",
+      [username, body, article_id]
+    )
+    .then((result) => {
+      if (result.rows.length === 0) {
+        return Promise.reject();
+      }
+      return result.rows[0];
+    });
 }
 
 function updateArticleVotes(article_id, votes) {
-  return db.query(`
+  return db
+    .query(
+      `
     UPDATE articles
     SET votes = votes + $1
     WHERE article_id = $2
     RETURNING *;
-    `, [votes, article_id])
+    `,
+      [votes, article_id]
+    )
 
-    .then(({rows}) => {
-      if(rows.length === 0){
-        return Promise.reject({status: 404, msg: "Article not found" })
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({ status: 404, msg: "Article not found" });
       }
-      return rows[0]
-    })
+      return rows[0];
+    });
 }
 
-
-
-module.exports = { readTopics, readArticleId, readArticles, readArticleComments, insertComment, updateArticleVotes};
+module.exports = {
+  readTopics,
+  readArticleId,
+  readArticles,
+  readArticleComments,
+  insertComment,
+  updateArticleVotes,
+};

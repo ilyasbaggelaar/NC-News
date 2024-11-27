@@ -262,34 +262,32 @@ describe("PATCH /api/articles/:article_id", () => {
   });
 
   test("PATCH: 400 responds with error if votes is missing or invalid", () => {
-    const votesInvalid = {votes: "This is a string! Yipee!!!"}
-
+    const votesInvalid = { votes: "This is a string! Yipee!!!" };
 
     return request(app)
-    .patch("/api/articles/1")
-    .send(votesInvalid)
-    .expect(400)
-    .then((response) => {
-      const {body} = response;
-      const {msg} = body;
+      .patch("/api/articles/1")
+      .send(votesInvalid)
+      .expect(400)
+      .then((response) => {
+        const { body } = response;
+        const { msg } = body;
 
-      expect(msg).toBe("Bad request")
-    })
-  })
+        expect(msg).toBe("Bad request");
+      });
+  });
 
   test("PATCH: 404 responds with error if article_id does not exist", () => {
-
-    const votesInvalid = {votes: 5}
+    const votesInvalid = { votes: 5 };
 
     return request(app)
-    .patch("/api/articles/9999")
-    .send(votesInvalid)
-    .expect(404)
-    .then((response) => {
-      const {body} = response;
-      const {msg} = body;
+      .patch("/api/articles/9999")
+      .send(votesInvalid)
+      .expect(404)
+      .then((response) => {
+        const { body } = response;
+        const { msg } = body;
 
-      expect(msg).toBe("Article not found")
-    })
-  })
+        expect(msg).toBe("Article not found");
+      });
+  });
 });

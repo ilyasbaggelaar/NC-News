@@ -5,7 +5,7 @@ const {
   readArticles,
   readArticleComments,
   insertComment,
-  updateArticleVotes
+  updateArticleVotes,
 } = require("../models/api.model");
 
 exports.getApiDocu = (req, res) => {
@@ -65,32 +65,28 @@ exports.getArticleComments = (req, res, next) => {
 };
 
 exports.postArticleComment = (req, res, next) => {
+  const { article_id } = req.params;
+  const { username, body } = req.body;
 
-
-  const { article_id } = req.params
-  const { username, body } = req.body
-
-  
-
-  insertComment(username, body, article_id).then((comment) => {
-    res.status(201).send({comment})
-  })
-  .catch((err) => {
-    next(err)
-  })
-}
+  insertComment(username, body, article_id)
+    .then((comment) => {
+      res.status(201).send({ comment });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
 
 exports.patchArticleVotes = (req, res, next) => {
-
   const { article_id } = req.params;
   const { votes } = req.body;
 
   updateArticleVotes(article_id, votes)
-  .then((updatedArticle) => {
-    res.status(200).send({article: updatedArticle})
-  })
-  .catch((err) => {
-    console.log(err)
-    next(err)
-  })
-}
+    .then((updatedArticle) => {
+      res.status(200).send({ article: updatedArticle });
+    })
+    .catch((err) => {
+      console.log(err);
+      next(err);
+    });
+};
