@@ -7,7 +7,8 @@ const {
   getArticleComments,
   postArticleComment,
   patchArticleVotes,
-  deleteComments
+  deleteComments,
+  getUsers
 } = require("./db/Controllers/api.controller");
 
 const app = express();
@@ -22,6 +23,8 @@ app.get("/api/articles/:article_id", getArticleId);
 app.get("/api/articles", getArticles);
 
 app.get("/api/articles/:article_id/comments", getArticleComments);
+
+app.get("/api/users/", getUsers)
 
 app.post("/api/articles/:article_id/comments", postArticleComment);
 
@@ -46,5 +49,6 @@ app.use((err, req, res, next) => {
     res.status(err.status).send({ msg: err.msg });
   } else res.status(500).send({ msg: "internal server error" });
 });
+
 
 module.exports = app;
