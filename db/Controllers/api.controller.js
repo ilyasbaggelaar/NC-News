@@ -6,7 +6,8 @@ const {
   readArticleComments,
   insertComment,
   updateArticleVotes,
-  deleteComment
+  deleteComment,
+  readUsers
 } = require("../models/api.model");
 
 exports.getApiDocu = (req, res) => {
@@ -97,6 +98,16 @@ exports.deleteComments = (req, res, next) => {
   deleteComment(comment_id)
   .then(() => {
     res.status(204).send()
+  })
+  .catch((err) => {
+    next(err)
+  })
+}
+
+exports.getUsers = (req, res, next) => {
+  readUsers()
+  .then((users) => {
+    res.status(200).send({users})
   })
   .catch((err) => {
     next(err)

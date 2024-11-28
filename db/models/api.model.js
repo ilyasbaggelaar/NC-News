@@ -111,6 +111,18 @@ function deleteComment(comment_id) {
 
 }
 
+function readUsers() {
+  return db.query(`
+    SELECT * FROM users;
+    `)
+    .then(({rows}) => {
+      if(rows.length === 0){
+        return Promise.reject({status: 404, msg: "Users not found"})
+      }
+      return rows
+    })
+}
+
 module.exports = {
   readTopics,
   readArticleId,
@@ -119,4 +131,5 @@ module.exports = {
   insertComment,
   updateArticleVotes,
   deleteComment,
+  readUsers
 };
