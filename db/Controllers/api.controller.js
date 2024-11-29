@@ -25,7 +25,7 @@ exports.getTopics = (req, res) => {
     });
 };
 
-exports.getArticleId = (req, res) => {
+exports.getArticleId = (req, res, next) => {
   const { article_id } = req.params;
 
   readArticleId(article_id)
@@ -37,11 +37,7 @@ exports.getArticleId = (req, res) => {
       }
     })
     .catch((err) => {
-      if (err.code === "22P02") {
-        res.status(400).send({ msg: "Invalid article ID" });
-      } else {
-        res.status(500).send({ msg: "Internal server error" });
-      }
+      next(err)
     });
 };
 
