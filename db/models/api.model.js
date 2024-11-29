@@ -36,7 +36,7 @@ function readArticleId(articleId) {
     });
 }
 
-function readArticles(sort_by = 'created_at', order = 'DESC') {
+function readArticles(sort_by = 'created_at', order = 'DESC', topic) {
 
   const validSortBy = ['created_at', 'article_id', 'title', 'votes', 'topic']
   const validSortQuery = ['ASC', 'DESC', 'asc', 'desc']
@@ -55,20 +55,28 @@ SELECT
 FROM articles
 LEFT JOIN comments
 ON articles.article_id = comments.article_id
-    GROUP BY articles.article_id 
+    
 `;
 
+let queryValue = []
 
+
+if(topic) {
+  sqlQuery += `WHERE articles.topic = $1 `
+  queryValue.push(topic)
+}
 
   if(!validSortBy.includes(sort_by) || !validSortQuery.includes(order)){
     return Promise.reject({status: 400, msg: 'bad request'})
   }
 
-  else if(sort_by) {
-    sqlQuery += `ORDER BY articles.${sort_by} ${order} `
-  }
 
-  return db.query(sqlQuery).then(({ rows }) => {
+    sqlQuery += `GROUP BY articles.article_id ORDER BY articles.${sort_by} ${order} `
+  
+
+
+
+  return db.query(sqlQuery, queryValue).then(({ rows }) => {
     rows.forEach((article) => {
       article.comment_count = parseInt(article.comment_count);
     });

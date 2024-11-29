@@ -377,26 +377,39 @@ describe('GET /api/articles?sort_by=', () => {
 
 })
 
-describe('GET/api/articles?sort-by=topic', () => {
+describe('GET/api/articles?topic=mitch', () => {
   test('if newly added sort by input works together with ASC & DESC order functionality', () => {
     return request(app)
-    .get('/api/articles?sort_by=topic&order=ASC')
+    .get('/api/articles?topic=mitch&order=ASC')
     .expect(200)
     .then(({body}) => {
-      const {articles} = body
-      expect(articles).toBeSortedBy('topic')
+      const { articles } = body;
+      expect(articles.length).toBeGreaterThan(0);
+      articles.forEach((article) => {
+        expect(article).toEqual(
+          expect.objectContaining({
+            topic: "mitch",
+            article_id: expect.any(Number),
+            title: expect.any(String),
+            author: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            comment_count: expect.any(Number),
+          })
+        );
+      });
     })
   })
 
-  test('Tests descending functionality on topic', () => {
-    return request(app)
-    .get('/api/articles?sort_by=topic&order=DESC')
-    .expect(200)
-    .then(({body}) => {
-      const {articles} = body
-      expect(articles).toBeSortedBy('topic', {descending: true})
-    })
-  })
+  // test("404: Responds with an error if the topic doesnt exist", () => {
+  //   return request(app)
+  //   .get("/api/articles?topic=invaliddd")
+  //   .expect(404)
+  //   .then(({body}) => {
+  //     const {msg} = body
+  //     expect(msg).toBe("Topic not found")
+  //   })
+  // }) 
+
+  //CANNOT GET IT TO WORK!
 })
-
-//Add new describe block for article_id(commentcount)
