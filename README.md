@@ -10,21 +10,47 @@ Prerequistes:
 
 # More information on how to set up your database locally can be found here: https://www.postgresql.org/
 
+# Live Version
+
+Explore the hosted API:
+[NC News API on Render](https://nc-news-f67l.onrender.com)
+
 # Steps to run the project locally
 
 1. Clone the repo (git clone <repo_url>)
 2. Inside your development envirnoment (VS for example)- install all dependencies: npm install
 
 # Envirnoment Setup
-The .env files are ignored by Git for security, they're not included when cloning the repository. To run the project locally, you must manually create the following
-.env files in the ROOT directory of your project:
 
-1. .env.development
-2. .env.test
+To run the project locally, you'll need to configure environment variables in two .env files.
 
-In those files add: PGDATABASE="Database Name"
+    Create the .env files:
+        .env.development
+        .env.test
 
-Be sure to look in db/setup.sql to find the corresponding database name. Remove the quotations and add the Database name found in those files.
+Add the following variables to the respective files:
+
+For .env.development:
+PGDATABASE=nc_news
+
+For .env.test:
+PGDATABASE=nc_news_test
+
+These files ensure the correct database is used for development and testing environments.
+
+# Set up the DB
+
+Create and seed the local databases with the following commands:
+npm run setup-dbs
+npm run seed
+
+# Run the tests!
+
+Verify everything is working by running the tests!
+You can do this by running the command:
+npm test
+
+
 
 # Aditional notes
 
