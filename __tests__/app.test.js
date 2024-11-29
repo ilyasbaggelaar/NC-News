@@ -375,3 +375,25 @@ describe('GET /api/articles?sort_by=', () => {
   })
 
 })
+
+describe('GET/api/articles?sort-by=topic', () => {
+  test('if newly added sort by input works together with ASC & DESC order functionality', () => {
+    return request(app)
+    .get('/api/articles?sort_by=topic&order=ASC')
+    .expect(200)
+    .then(({body}) => {
+      const {articles} = body
+      expect(articles).toBeSortedBy('topic')
+    })
+  })
+
+  test('Tests descending functionality on topic', () => {
+    return request(app)
+    .get('/api/articles?sort_by=topic&order=DESC')
+    .expect(200)
+    .then(({body}) => {
+      const {articles} = body
+      expect(articles).toBeSortedBy('topic', {descending: true})
+    })
+  })
+})

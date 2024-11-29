@@ -18,7 +18,7 @@ function readArticleId(articleId) {
 
 function readArticles(sort_by = 'created_at', order = 'DESC') {
 
-  const validSortBy = ['created_at', 'article_id', 'title', 'votes']
+  const validSortBy = ['created_at', 'article_id', 'title', 'votes', 'topic']
   const validSortQuery = ['ASC', 'DESC', 'asc', 'desc']
 
 
