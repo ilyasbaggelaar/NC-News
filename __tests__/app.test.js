@@ -397,3 +397,5 @@ describe('GET/api/articles?sort-by=topic', () => {
     })
   })
 })
+
+//Add new describe block for article_id(commentcount)
