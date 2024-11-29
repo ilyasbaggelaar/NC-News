@@ -343,3 +343,35 @@ describe("GET /api/users", () => {
     .expect(404)
   })
 })
+
+describe('GET /api/articles?sort_by=', () => {
+  test("200: Responds with an array sorted by the sort_by Query & the order we want it. In this case DESCENDING", () => {
+    return request(app)
+    .get('/api/articles?sort_by=title&order=DESC')
+    .expect(200)
+    .then(({body}) => {
+      const {articles} = body
+      expect(articles).toBeSortedBy('title', {descending: true})
+    })
+  })
+
+  test("200: Responds with an array sorted by the sort_by Query & the order we want it. In this case ASCENDING", () => {
+    return request(app)
+    .get('/api/articles?sort_by=title&order=ASC')
+    .expect(200)
+    .then(({body}) => {
+      const {articles} = body
+      expect(articles).toBeSortedBy('title')
+    })
+  })
+
+  test('400: returns an error for an invalid sort_by column', () => {
+    return request(app)
+      .get('/api/articles?sort_by=invalid_column')
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe('bad request');
+      })
+  })
+
+})
