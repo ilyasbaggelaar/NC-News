@@ -67,7 +67,7 @@ describe("GET /api/articles/:article_id", () => {
       .get("/api/articles/abcdefg")
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("Invalid article ID");
+        expect(body.msg).toBe("Bad request");
       });
   });
 
@@ -86,6 +86,7 @@ describe("GET /api/articles/:article_id", () => {
           created_at: expect.any(String),
           votes: expect.any(Number),
           article_img_url: expect.any(String),
+          comment_count: expect.any(String)
         });
       });
   });
