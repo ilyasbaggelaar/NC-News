@@ -45,13 +45,16 @@ exports.getArticleId = (req, res) => {
     });
 };
 
-exports.getArticles = (req, res) => {
-  readArticles().then((articles) => {
-    if (articles.length === 0) {
-      return res.status(404).send({ msg: "Article not found" });
-    }
+exports.getArticles = (req, res, next) => {
+
+  const { sort_by, order } = req.query
+
+  readArticles(sort_by, order).then((articles) => {
     res.status(200).send({ articles });
-  });
+  })
+  .catch((err) => {
+    next(err)
+  })
 };
 
 exports.getArticleComments = (req, res, next) => {

@@ -26,5 +26,64 @@
         }
       ]
     }
+  },
+  "GET /api/articles/:article_id": {
+    "description" : "gives a specific article based on the ID given",
+    "queries": "Any number",
+    "exampleResponse": {
+      "articles": [
+        {
+          "article_id": 3,
+          "title": "coding",
+          "author":	"happyamy2016",
+          "body":	"This is a collection of open source apps built with React.JS library. In this observation, we compared nearly 800 projects to pick the top 22. (React Native: 11, React: 11). To evaluate the quality, Mybridge AI considered a variety of factors to determine how useful the projects are for programmers. To give you an idea on the quality, the average number of Github stars from the 22 projects was 1,681.",
+          "created_at": "2020-02-29T11:12:00.000Z",
+          "votes": 0,
+          "article_img_url": 	"https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg?w=700&h=700"
+        }
+      ]
+    }
+  },
+  "GET /api/articles/:article_id/comments": {
+    "description" : "Gives the specific comment back.",
+    "queries": "Any number",
+    "exampleResponse": {
+      "comments": [
+        {
+          "comment_id": 145,
+          "body": "Odit aut error. Occaecati et qui. Quam nam aut dolorem.",
+          "article_id": 3,
+          "author": "jessjelly",
+          "votes": 10
+        }
+      ]
+    }
+  },
+
+  "GET /api/users": {
+    "description" : "Serves an array of all users",
+    "queries": [],
+    "exampleResponse": {
+      "users": [{ "username": "tickle1222", "name": "Tom Tickle", "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953" }]
+    }
+  },
+
+  "GET /api/articles?sort_by=<input>&order=<ASC/DESC>": {
+    "description": "Sorts the articles array through custom inputs",
+    "queries": ["created_at(default)", "article_id", "title", "votes"],
+    "order": ["ASC", "DESC"],
+    "exampleResponse": {
+      "articles": [
+        {
+          "article_id": 3,
+          "title": "coding",
+          "author":	"happyamy2016",
+          "body":	"This is a collection of open source apps built with React.JS library. In this observation, we compared nearly 800 projects to pick the top 22. (React Native: 11, React: 11). To evaluate the quality, Mybridge AI considered a variety of factors to determine how useful the projects are for programmers. To give you an idea on the quality, the average number of Github stars from the 22 projects was 1,681.",
+          "created_at": "2020-02-29T11:12:00.000Z",
+          "votes": 0,
+          "article_img_url": 	"https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg?w=700&h=700"
+        }
+      ]
+    }
   }
 }

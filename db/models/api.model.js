@@ -16,7 +16,12 @@ function readArticleId(articleId) {
     });
 }
 
-function readArticles() {
+function readArticles(sort_by = 'created_at', order = 'DESC') {
+
+  const validSortBy = ['created_at', 'article_id', 'title', 'votes']
+  const validSortQuery = ['ASC', 'DESC', 'asc', 'desc']
+
+
   let sqlQuery = `
 SELECT 
       articles.article_id,
@@ -30,18 +35,26 @@ SELECT
 FROM articles
 LEFT JOIN comments
 ON articles.article_id = comments.article_id
-    GROUP BY articles.article_id
-    ORDER BY articles.created_at DESC;
+    GROUP BY articles.article_id 
 `;
 
   const queryValues = [];
+
+  if(!validSortBy.includes(sort_by) || !validSortQuery.includes(order)){
+    return Promise.reject({status: 400, msg: 'bad request'})
+  }
+
+  else if(sort_by) {
+    sqlQuery += `ORDER BY articles.${sort_by} ${order} `
+  }
 
   return db.query(sqlQuery, queryValues).then(({ rows }) => {
     rows.forEach((article) => {
       article.comment_count = parseInt(article.comment_count);
     });
+    
     return rows;
-  });
+  })
 }
 
 function readArticleComments(article_id) {
