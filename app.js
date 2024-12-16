@@ -1,4 +1,6 @@
 const express = require("express");
+const cors = require("cors");
+
 const {
   getApiDocu,
   getTopics,
@@ -8,10 +10,13 @@ const {
   postArticleComment,
   patchArticleVotes,
   deleteComments,
-  getUsers
+  getUsers,
 } = require("./db/Controllers/api.controller");
 
 const app = express();
+
+app.use(cors())
+
 app.use(express.json());
 
 app.get("/api", getApiDocu);
@@ -24,13 +29,13 @@ app.get("/api/articles", getArticles);
 
 app.get("/api/articles/:article_id/comments", getArticleComments);
 
-app.get("/api/users/", getUsers)
+app.get("/api/users/", getUsers);
 
 app.post("/api/articles/:article_id/comments", postArticleComment);
 
 app.patch("/api/articles/:article_id", patchArticleVotes);
 
-app.delete("/api/comments/:comment_id", deleteComments)
+app.delete("/api/comments/:comment_id", deleteComments);
 
 app.use((err, req, res, next) => {
   if (err.code === "22P02") {
@@ -49,6 +54,5 @@ app.use((err, req, res, next) => {
     res.status(err.status).send({ msg: err.msg });
   } else res.status(500).send({ msg: "internal server error" });
 });
-
 
 module.exports = app;
