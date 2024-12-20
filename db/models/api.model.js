@@ -37,52 +37,53 @@ function readArticleId(articleId) {
 }
 
 function readArticles(sort_by = 'created_at', order = 'DESC', topic) {
-
-  const validSortBy = ['created_at', 'article_id', 'title', 'votes', 'topic', 'comment_count']
-  const validSortQuery = ['ASC', 'DESC', 'asc', 'desc']
-
+  const validSortBy = ['created_at', 'article_id', 'title', 'votes', 'topic', 'comment_count'];
+  const validSortQuery = ['ASC', 'DESC', 'asc', 'desc'];
 
   let sqlQuery = `
-SELECT 
-      articles.article_id,
-      articles.title,
-      articles.topic,
-      articles.author,
-      articles.created_at,
-      articles.votes,
-      articles.article_img_url,
-    COALESCE(COUNT(comments.article_id), 0) AS comment_count
-FROM articles
-LEFT JOIN comments
-ON articles.article_id = comments.article_id
-    
-`;
+    SELECT 
+        articles.article_id,
+        articles.title,
+        articles.topic,
+        articles.author,
+        articles.created_at,
+        articles.votes,
+        articles.article_img_url,
+        COALESCE(COUNT(comments.article_id), 0) AS comment_count
+    FROM articles
+    LEFT JOIN comments
+    ON articles.article_id = comments.article_id
+    `;
 
-let queryValue = []
-
-
-if(topic) {
-  sqlQuery += `WHERE articles.topic = $1 `
-  queryValue.push(topic)
-}
-
-  if(!validSortBy.includes(sort_by) || !validSortQuery.includes(order)){
-    return Promise.reject({status: 400, msg: 'bad request'})
+  let queryValue = [];
+  if (topic) {
+    sqlQuery += `WHERE articles.topic = $1 `;
+    queryValue.push(topic);
   }
 
+  if (!validSortBy.includes(sort_by) || !validSortQuery.includes(order)) {
+    return Promise.reject({ status: 400, msg: 'bad request' });
+  }
 
-    sqlQuery += `GROUP BY articles.article_id ORDER BY articles.${sort_by} ${order} `
-  
-
-
+  sqlQuery += `
+    GROUP BY 
+        articles.article_id, 
+        articles.title, 
+        articles.topic, 
+        articles.author, 
+        articles.created_at, 
+        articles.votes, 
+        articles.article_img_url
+    ORDER BY ${sort_by} ${order};
+  `;
 
   return db.query(sqlQuery, queryValue).then(({ rows }) => {
     rows.forEach((article) => {
       article.comment_count = parseInt(article.comment_count);
     });
-    
+
     return rows;
-  })
+  });
 }
 
 function readArticleComments(article_id) {
